@@ -4,3 +4,27 @@ on:
   push:
     branches:
       - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: python setip
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: install pkgs
+        run: |
+            cd function
+            python -m pip install --upgrade pip
+            if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; fi
+      - name: create artifacts
+        run: |
+            cd function
+            zip -r ../${{github.sha}}.zip .
+      - name: push artifacts
+        uses: actions/upload-artifacts@v2
+        with:
+          name: zipped-bundle
+          path: ${{github.sha}}.zip
