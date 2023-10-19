@@ -1,0 +1,6 @@
+name: Deploy Lambda func
+
+on:
+  push:
+    branches:
+      - main
